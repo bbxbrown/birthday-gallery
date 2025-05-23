@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐！</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B8B',
+                        secondary: '#FFD166',
+                        dark: '#2A2A2A',
+                        light: '#FFF9F9'
+                    },
+                    fontFamily: {
+                        birthday: ['"Comic Sans MS"', '"Marker Felt"', 'cursive']
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'spin-slow': 'spin 10s linear infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .text-shadow-lg {
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+            }
+            .filter-shadow {
+                filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+            }
+            .backdrop-blur-sm {
+                backdrop-filter: blur(4px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-light to-pink-50 min-h-screen font-birthday text-dark overflow-x-hidden">
+    <!-- 顶部装饰 -->
+    <div class="absolute top-0 left-0 w-full overflow-hidden pointer-events-none">
+        <div class="w-[120%] h-20 bg-primary/20 rounded-b-full -translate-x-10 filter-blur-md"></div>
+    </div>
+    
+    <!-- 音频元素 -->
+    <audio id="clickSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <div class="container mx-auto px-4 py-12 relative">
+        <!-- 标题区域 -->
+        <header class="text-center mb-12 pt-6">
+            <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold text-primary animate-pulse-slow text-shadow-lg">
+                <span class="inline-block transform -rotate-6">生日快乐</span>
+                <span class="inline-block transform rotate-6">🎉</span>
+            </h1>
+            <p class="text-[clamp(1.2rem,2vw,1.5rem)] mt-4 text-dark/80 animate-float">
+                愿你的每一天都充满喜悦和爱
+            </p>
+        </header>
+        
+        <!-- 控制区域 -->
+        <div class="flex justify-center items-center gap-4 mb-8">
+            <button id="playMusic" class="bg-primary hover:bg-primary/80 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110">
+                <i class="fa fa-music"></i>
+            </button>
+            <button id="pauseMusic" class="bg-dark hover:bg-dark/80 text-white p-3 rounded-full shadow-lg transition-all hover:scale-110">
+                <i class="fa fa-pause"></i>
+            </button>
+            <button id="toggleSound" class="bg-secondary hover:bg-secondary/80 text-dark p-3 rounded-full shadow-lg transition-all hover:scale-110">
+                <i class="fa fa-volume-up"></i>
+            </button>
+        </div>
+        
+        <!-- 图片展示区域 -->
+        <div id="galleryArea" class="max-w-5xl mx-auto">
+            <h2 class="text-2xl font-bold text-primary mb-8 text-center">美好的回忆</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="photo-card group cursor-pointer" data-index="0">
+                    <div class="relative overflow-hidden rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-300 hover:shadow-xl">
+                        <img class="gallery-image w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-500" src="image1.jpg" alt="照片1">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <p class="text-white font-medium">点击查看大图</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="photo-card group cursor-pointer" data-index="1">
+                    <div class="relative overflow-hidden rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-300 hover:shadow-xl">
+                        <img class="gallery-image w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-500" src="image2.jpg" alt="照片2">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <p class="text-white font-medium">点击查看大图</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="photo-card group cursor-pointer" data-index="2">
+                    <div class="relative overflow-hidden rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-300 hover:shadow-xl">
+                        <img class="gallery-image w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-500" src="image3.jpg" alt="照片3">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <p class="text-white font-medium">点击查看大图</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 装饰元素 -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary/30 rounded-full filter-blur-xl animate-pulse-slow"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-primary/20 rounded-full filter-blur-xl animate-pulse-slow" style="animation-delay: 1s;"></div>
+            
+            <!-- 祝福信息 -->
+            <div class="bg-white/70 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-primary/20 relative z-10">
+                <h3 class="text-xl font-bold text-primary mb-4">特别的祝福</h3>
+                <p class="text-dark/80 leading-relaxed">
+                    亲爱的莉莉，今天是你的生日，请吃好喝好，开开心心度过这美好的一天。如果说愿你每时每刻都没有烦恼幸福快乐可能不太现实，但是我会祝福你生活里常伴爱与温暖，想做的事情都能做到，身体倍棒吃嘛嘛香，不好的人事物总能很快就过去，让你的记忆里面充满开心感动~~~❤❤❤
+                </p>
+                <div class="mt-6 text-right">
+                    <p class="font-bold text-primary">永远爱你的人</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 大图查看模态框 -->
+    <div id="imageModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300">
+        <button id="closeModal" class="absolute top-6 right-6 text-white text-3xl hover:text-primary transition-colors">
+            <i class="fa fa-times"></i>
+        </button>
+        <button id="prevImage" class="absolute left-6 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-primary transition-colors">
+            <i class="fa fa-chevron-left"></i>
+        </button>
+        <button id="nextImage" class="absolute right-6 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-primary transition-colors">
+            <i class="fa fa-chevron-right"></i>
+        </button>
+        <div class="max-w-4xl w-full px-4">
+            <img id="modalImage" src="" alt="大图查看" class="max-h-[80vh] mx-auto rounded-lg shadow-2xl transform transition-transform duration-500 hover:scale-[1.01]">
+        </div>
+    </div>
+    
+    <!-- 装饰元素 -->
+    <div class="fixed bottom-0 left-0 w-full overflow-hidden h-20 pointer-events-none">
+        <div class="w-[120%] h-full bg-primary/10 rounded-t-full -translate-x-10 filter-blur-md"></div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 音频元素
+            const clickSound = document.getElementById('clickSound');
+            const bgMusic = document.getElementById('bgMusic');
+            
+            // 区域元素
+            const galleryArea = document.getElementById('galleryArea');
+            
+            // 按钮元素
+            const playMusicBtn = document.getElementById('playMusic');
+            const pauseMusicBtn = document.getElementById('pauseMusic');
+            const toggleSoundBtn = document.getElementById('toggleSound');
+            
+            // 模态框元素
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeModalBtn = document.getElementById('closeModal');
+            const prevImageBtn = document.getElementById('prevImage');
+            const nextImageBtn = document.getElementById('nextImage');
+            
+            // 图片数据
+            const imageData = [
+                'image1.jpg',
+                'image2.jpg',
+                'image3.jpg'
+            ];
+            let currentImageIndex = 0;
+            let soundEnabled = true;
+            
+            // 图片卡片点击事件监听
+            const photoCards = document.querySelectorAll('.photo-card');
+            photoCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    playClickSound();
+                    const index = parseInt(this.dataset.index);
+                    openImageModal(index);
+                });
+            });
+            
+            // 模态框控制
+            closeModalBtn.addEventListener('click', closeImageModal);
+            prevImageBtn.addEventListener('click', showPrevImage);
+            nextImageBtn.addEventListener('click', showNextImage);
+            
+            // 音乐控制
+            playMusicBtn.addEventListener('click', playBackgroundMusic);
+            pauseMusicBtn.addEventListener('click', pauseBackgroundMusic);
+            toggleSoundBtn.addEventListener('click', toggleSound);
+            
+            // 键盘导航
+            document.addEventListener('keydown', function(e) {
+                if (imageModal.classList.contains('opacity-100')) {
+                    if (e.key === 'Escape') closeImageModal();
+                    if (e.key === 'ArrowLeft') showPrevImage();
+                    if (e.key === 'ArrowRight') showNextImage();
+                }
+            });
+            
+            // 打开图片模态框
+            function openImageModal(index) {
+                currentImageIndex = index;
+                modalImage.src = imageData[index];
+                imageModal.classList.remove('hidden');
+                
+                // 添加淡入动画
+                setTimeout(() => {
+                    imageModal.classList.add('opacity-100');
+                }, 10);
+            }
+            
+            // 关闭图片模态框
+            function closeImageModal() {
+                imageModal.classList.remove('opacity-100');
+                setTimeout(() => {
+                    imageModal.classList.add('hidden');
+                }, 300);
+            }
+            
+            // 显示上一张图片
+            function showPrevImage() {
+                playClickSound();
+                currentImageIndex = (currentImageIndex - 1 + imageData.length) % imageData.length;
+                modalImage.src = imageData[currentImageIndex];
+                
+                // 添加切换动画
+                modalImage.classList.add('scale-95', 'opacity-50');
+                setTimeout(() => {
+                    modalImage.classList.remove('scale-95', 'opacity-50');
+                }, 100);
+            }
+            
+            // 显示下一张图片
+            function showNextImage() {
+                playClickSound();
+                currentImageIndex = (currentImageIndex + 1) % imageData.length;
+                modalImage.src = imageData[currentImageIndex];
+                
+                // 添加切换动画
+                modalImage.classList.add('scale-95', 'opacity-50');
+                setTimeout(() => {
+                    modalImage.classList.remove('scale-95', 'opacity-50');
+                }, 100);
+            }
+            
+            // 播放点击音效
+            function playClickSound() {
+                if (soundEnabled) {
+                    clickSound.currentTime = 0;
+                    clickSound.play().catch(e => console.log('音频播放失败:', e));
+                }
+            }
+            
+            // 播放背景音乐
+            function playBackgroundMusic() {
+                bgMusic.play().catch(e => console.log('背景音乐播放失败:', e));
+                playMusicBtn.classList.add('animate-spin-slow');
+                pauseMusicBtn.classList.remove('animate-spin-slow');
+            }
+            
+            // 暂停背景音乐
+            function pauseBackgroundMusic() {
+                bgMusic.pause();
+                playMusicBtn.classList.remove('animate-spin-slow');
+                pauseMusicBtn.classList.add('animate-spin-slow');
+            }
+            
+            // 切换音效开关
+            function toggleSound() {
+                soundEnabled = !soundEnabled;
+                if (soundEnabled) {
+                    toggleSoundBtn.innerHTML = '<i class="fa fa-volume-up"></i>';
+                    playClickSound();
+                } else {
+                    toggleSoundBtn.innerHTML = '<i class="fa fa-volume-off"></i>';
+                }
+            }
+            
+            // 添加装饰元素
+            createConfetti();
+            
+            // 自动播放背景音乐
+            setTimeout(() => {
+                playBackgroundMusic();
+            }, 1000);
+        });
+        
+        // 创建装饰元素
+        function createConfetti() {
+            const container = document.body;
+            const colors = ['#FF6B8B', '#FFD166', '#06D6A0', '#118AB2', '#073B4C'];
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                const size = Math.random() * 10 + 5;
+                
+                confetti.style.position = 'fixed';
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.top = `${Math.random() * 100}vh`;
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.opacity = (Math.random() * 0.5 + 0.5).toString();
+                confetti.style.animation = `float ${Math.random() * 5 + 5}s linear infinite`;
+                confetti.style.transform = `translateY(0)`;
+                confetti.style.zIndex = '0';
+                
+                container.appendChild(confetti);
+            }
+        }
+    </script>
+</body>
+</html>    
